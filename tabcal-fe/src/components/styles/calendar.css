@@ -1,0 +1,40 @@
+
+
+.fc-toolbar-title {
+    font-family: poppins;
+    text-transform: lowercase;
+    font-size: small;
+    width: fit-content;
+}
+
+/* .fc .fc-prev-button .fc-next-button {
+    background-color: #3c83f6;
+    border: transparent;
+} */
+
+.fc .fc-today-button {
+    margin-right: 1vw;
+}
+
+.fc .fc-button-primary {
+    /* margin: 0 1vw 0 1vw; */
+    background-color: #3c83f6;
+    border: transparent;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #2563EB;
+    border: transparent;
+}
+
+
+
+
+.fc-daygrid-day-number {
+    font-family: poppins;
+    text-transform: lowercase;
+}
+
+.fc-day {
+    text-transform: lowercase;
+}
