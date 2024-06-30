@@ -4,21 +4,9 @@ type option = {
     label: string
 }
 
-
-const timezones: option[] = [
-    {
-        value: "world",
-        label: "hello"
-    },
-    {
-        value: "buzz",
-        label: "fizz",
-    }
-]
-
 const repeatOptions: option[] = [
     {
-        value: "no",
+        value: "none",
         label: "none"
     },
     {
@@ -31,4 +19,4 @@ const repeatOptions: option[] = [
     }
 ]
 
-export { timezones, repeatOptions }
+export { repeatOptions }

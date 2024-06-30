@@ -2,15 +2,16 @@ import Dropzone from "react-dropzone"
 import { type ClassValue } from "clsx"
 import { merge } from '../../utils/tw-merge'
 import { FiUpload } from "react-icons/fi"
-import { Dispatch, SetStateAction, useContext, useState } from "react"
+import { useState } from "react"
 import { toast } from "./UI/Toast/Use-toast"
-import { ImageContext } from "../contexts/ImageContext"
-import { Blob } from "buffer"
+import { useOptionsStore } from "../store/OptionsStore"
 
 export default function FileUpload( { className } : { className? : ClassValue}) {
-    const { imageb64, setImageb64 } = useContext(ImageContext);
+    // const { imageb64, setImageb64 } = useContext(ImageContext);
     const [filename, setFilename] = useState<string>("");
     const [uploaded, setUploaded] = useState<boolean>(false);
+
+    const setImgB64 = useOptionsStore((state) => state.setImgB64)
 
     function checkFiles(input: File[]) {
         const file: File = input[0]
@@ -48,7 +49,8 @@ export default function FileUpload( { className } : { className? : ClassValue}) 
             reader.readAsDataURL(file);
             reader.onload = () => {
                 imgb64 = reader.result
-                setImageb64(imgb64 as string)
+                setImgB64(imgb64 as string);
+                // setImageb64(imgb64 as string)
                 // fetch("http://localhost:3000/upload", {
                 //     method: "POST",
                 //     headers:{

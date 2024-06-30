@@ -20,35 +20,12 @@ import {
 } from "./Popover"
 import { Dispatch, SetStateAction } from "react"
 
-// const frameworks = [
-//   {
-//     value: "next.js",
-//     label: "Next.js",
-//   },
-//   {
-//     value: "sveltekit",
-//     label: "SvelteKit",
-//   },
-//   {
-//     value: "nuxt.js",
-//     label: "Nuxt.js",
-//   },
-//   {
-//     value: "remix",
-//     label: "Remix",
-//   },
-//   {
-//     value: "astro",
-//     label: "Astro",
-//   },
-// ]
-   
 type option = {
     value: string
     label: string
 }
 
-export function Combobox({ placeholder, options, callback } : { placeholder: string, options: option[], callback: Dispatch<SetStateAction<string>>}) {
+export function Combobox({ placeholder, options, callback } : { placeholder: string, options: option[], callback: (newRepeatMode: string) => void}) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
    

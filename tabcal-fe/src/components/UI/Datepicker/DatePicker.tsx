@@ -12,14 +12,14 @@ import {
   PopoverTrigger,
 } from "./../Popover"
 import { Button } from "./../Button"
-import { Dispatch, SetStateAction } from "react"
 import { useToast } from "../Toast/Use-toast"
-import { EndRepeatDateContext } from "../../../contexts/endRepeatDateContext"
+import { useOptionsStore } from "../../../store/OptionsStore"
 
 export function DatePicker() {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [calendarOpen, setCalendarOpen] = React.useState<boolean>(false);
-  const { setEndRepeatDate } = React.useContext(EndRepeatDateContext)
+  const setEndRepeatDate = useOptionsStore((state) => state.setEndRepeatDate)
+
 
   const { toast } = useToast()
 
@@ -40,7 +40,7 @@ export function DatePicker() {
   }
 
   return (
-    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+    <Popover open={calendarOpen} onOpenChange={setCalendarOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -53,7 +53,7 @@ export function DatePicker() {
           {selectedDate ? format(selectedDate, "PPP") : <span>repeat until?</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 backdrop-blur-2xl" align="center" side="bottom">
+      <PopoverContent className="w-full p-0 bg-white bg-opacity-50 backdrop-blur-2xl" align="center" side="bottom">
         <CalendarPicker
           mode="single"
           selected={selectedDate}
