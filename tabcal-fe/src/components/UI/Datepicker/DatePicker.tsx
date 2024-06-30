@@ -13,13 +13,10 @@ import {
 } from "./../Popover"
 import { Button } from "./../Button"
 import { useToast } from "../Toast/Use-toast"
-import { useOptionsStore } from "../../../store/OptionsStore"
 
-export function DatePicker() {
+export function DatePicker({ setEndRepeatDate } : { setEndRepeatDate: (newEndRepeatDate: string) => void}) {
   const [selectedDate, setSelectedDate] = React.useState<Date>();
   const [calendarOpen, setCalendarOpen] = React.useState<boolean>(false);
-  const setEndRepeatDate = useOptionsStore((state) => state.setEndRepeatDate)
-
 
   const { toast } = useToast()
 

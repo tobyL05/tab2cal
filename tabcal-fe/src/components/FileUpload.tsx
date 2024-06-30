@@ -7,7 +7,6 @@ import { toast } from "./UI/Toast/Use-toast"
 import { useOptionsStore } from "../store/OptionsStore"
 
 export default function FileUpload( { className } : { className? : ClassValue}) {
-    // const { imageb64, setImageb64 } = useContext(ImageContext);
     const [filename, setFilename] = useState<string>("");
     const [uploaded, setUploaded] = useState<boolean>(false);
 
@@ -51,15 +50,6 @@ export default function FileUpload( { className } : { className? : ClassValue}) 
                 imgb64 = reader.result
                 setImgB64(imgb64 as string);
                 // setImageb64(imgb64 as string)
-                // fetch("http://localhost:3000/upload", {
-                //     method: "POST",
-                //     headers:{
-                //         'Content-type': 'application/json'
-                //     },
-                //     body: JSON.stringify({
-                //         'image': imgb64
-                //     })
-                // });
                 console.log("file uploaded")
             }
         }

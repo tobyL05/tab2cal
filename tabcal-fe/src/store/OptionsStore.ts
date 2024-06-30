@@ -6,7 +6,7 @@ interface options {
     endRepeatDate: string | undefined
     setImgB64: (newImgb64: string) => void
     setRepeatMode: (newRepeatMode: string) => void
-    setEndRepeatDate: (newEndRepeatDate: string) => void
+    setEndRepeatDate: (newEndRepeatDate: string | undefined) => void
 }
 
 const useOptionsStore = create<options>()((set) => ({
@@ -15,7 +15,7 @@ const useOptionsStore = create<options>()((set) => ({
     endRepeatDate: undefined,
     setImgB64: (newImgb64: string) => set(() => ({imgb64: newImgb64})),
     setRepeatMode: (newRepeatMode: string) => set(() => ({repeatMode: newRepeatMode})),
-    setEndRepeatDate: (newEndRepeatDate: string) => set(() => ({endRepeatDate: newEndRepeatDate}))
+    setEndRepeatDate: (newEndRepeatDate: string | undefined) => set(() => ({endRepeatDate: newEndRepeatDate}))
 }))
 
 export { useOptionsStore }

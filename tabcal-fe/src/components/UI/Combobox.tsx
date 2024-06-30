@@ -25,7 +25,7 @@ type option = {
     label: string
 }
 
-export function Combobox({ placeholder, options, callback } : { placeholder: string, options: option[], callback: (newRepeatMode: string) => void}) {
+export function Combobox({ placeholder, options, setRepeatMode } : { placeholder: string, options: option[], setRepeatMode: (newRepeatMode: string) => void}) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
    
@@ -56,7 +56,7 @@ export function Combobox({ placeholder, options, callback } : { placeholder: str
                                     value={option.value}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue)
-                                        callback(currentValue === value ? "" : currentValue)
+                                        setRepeatMode(currentValue === value ? "" : currentValue)
                                         setOpen(false)
                                     }}>
                                     {option.label}
