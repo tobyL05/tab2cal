@@ -4,13 +4,19 @@ import Options from "./Options";
 import { Button } from "./UI/Button";
 import { useOptionsStore } from "../store/OptionsStore";
 import { toast } from "./UI/Toast/Use-toast";
+import { useCalendarStore } from "../store/CalendarStore";
+import Event from "@fullcalendar/react"
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
+
     const device = useDevice()
 
     const imgb64 = useOptionsStore((state) => state.imgb64)
     const repeatMode = useOptionsStore((state) => state.repeatMode)
     const endRepeatDate = useOptionsStore((state) => state.endRepeatDate);
+
+    const setEventsJson = useCalendarStore((state) => state.setEventsJson)
+    const setIcs = useCalendarStore((state) => state.setIcs)
 
     function validate() {
         if (!imgb64) {
@@ -41,20 +47,22 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
     async function generateCalendar() {
         // check if all required inputs 
         if (validate()) {
+            let req;
             try {
                 if (repeatMode !== "weekly until") {
-                    await fetch("http://localhost:3000/upload", {
+                    req = await fetch("http://localhost:3000/generate", {
                         method: "POST",
                         headers:{
                             'Content-type': 'application/json'
                         },
                         body: JSON.stringify({
                             'image': imgb64,
+                            // 'tz': Intl.DateTimeFormat().resolvedOptions().timeZone,
                             'repeat': repeatMode
                         })
                     });
                 } else {
-                    await fetch("http://localhost:3000/upload", {
+                    req = await fetch("http://localhost:3000/generate", {
                         method: "POST",
                         headers:{
                             'Content-type': 'application/json'
@@ -62,12 +70,20 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                         body: JSON.stringify({
                             'image': imgb64,
                             'repeat': "weekly until",
+                            // 'tz': Intl.DateTimeFormat().resolvedOptions().timeZone,
                             'endRepeatDate': endRepeatDate
                         })
                     });
                 }
+                const resp = await req.json();
+                const events: Event[] = resp.json;
+                const ics:string = resp.ics
+                setEventsJson(events) // set events
+                setIcs(ics) // b64 encoded ics file
+                console.log(events)
+                console.log(ics)
             } catch(error) {
-                // console.log(error)
+                console.log(error)
                 toast({
                     title: "an error occurred",
                     description: "uh oh, a network error occurred. check your internet connection or come back later",

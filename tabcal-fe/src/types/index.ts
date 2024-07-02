@@ -1,5 +1,4 @@
 
-
 // image: base64 encoded string
 // repeat: undefined or string to end recurrence (yyyymmddT0000)
 type CalendarSettings = {
@@ -16,7 +15,7 @@ type CalendarEvent = {
     startTime: string
     endTime: string
     location: string
-    rrule: string
+    rrule?: string
 }
 
 // name: Calendar name

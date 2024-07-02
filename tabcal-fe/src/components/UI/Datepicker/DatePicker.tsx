@@ -20,11 +20,14 @@ export function DatePicker({ setEndRepeatDate } : { setEndRepeatDate: (newEndRep
 
   const { toast } = useToast()
 
+  function parseDate(date: Date) {
+    return date.toISOString().split("-").join("").split(":").join("").split(".")[0]
+  }
 
   function handleSelect(date: Date | undefined) {
     if (date! > new Date()) {
       setSelectedDate(date)
-      setEndRepeatDate(date!.toISOString())
+      setEndRepeatDate(parseDate(date!))
       setCalendarOpen(false)
     } else {
       setCalendarOpen(true)

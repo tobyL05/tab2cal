@@ -2,6 +2,7 @@
 type option = {
     value: string
     label: string
+    [key: string]: string
 }
 
 const repeatOptions: option[] = [
