@@ -1,9 +1,22 @@
 import { Combobox } from "./UI/Combobox";
-import { repeatOptions } from "../assets/content";
 import { DatePicker } from "./UI/Datepicker/DatePicker";
 import { useOptionsStore } from "../store/OptionsStore";
 import { useEffect } from "react";
 
+const repeatOptions: { value: string, label: string }[] = [
+    {
+        value: "none",
+        label: "none"
+    },
+    {
+        value: "weekly",
+        label: "weekly"
+    },
+    {
+        value: "weekly until",
+        label: "weekly until set date"
+    }
+]
 
 export default function Options() {
     const repeatMode = useOptionsStore((state) => state.repeatMode);
@@ -20,11 +33,6 @@ export default function Options() {
 
     return ( 
         <div className="md:text-md lg:text-lg">
-            {/* might not need this */}
-            {/* <div className="w-full flex flex-col space-y-2 align-start py-2 grow">
-                <h1>time zone</h1>    
-                <Combobox placeholder="select timezone" options={timezones} callback={setTz}/> 
-            </div>        */}
             <div className="w-full flex flex-col space-y-2 align-start py-2 grow">
                 <h1>repeat?</h1>
                 <div className="flex flex-col items-start space-y-2">
