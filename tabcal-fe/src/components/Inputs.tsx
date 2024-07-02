@@ -6,10 +6,11 @@ import { useOptionsStore } from "../store/OptionsStore";
 import { toast } from "./UI/Toast/Use-toast";
 import { useCalendarStore } from "../store/CalendarStore";
 import Event from "@fullcalendar/react"
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ColorRing } from "react-loader-spinner"
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
-    const [icsDownload, setIcsDownload] = useState<string | undefined>()
+    const [loading, isLoading] = useState<boolean>(false)
 
     const device = useDevice()
 
@@ -20,12 +21,6 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
     const ics = useCalendarStore((state) => state.ics)
     const setIcs = useCalendarStore((state) => state.setIcs)
     const setEventsJson = useCalendarStore((state) => state.setEventsJson)
-
-    useEffect(() => {
-        if (ics) {
-            setIcsDownload(icsDownload)
-        }
-    },[ics])
 
     function validate() {
         if (!imgb64) {
@@ -58,20 +53,21 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
         if (validate()) {
             let req;
             try {
+                isLoading(true)
+                setEventsJson([])
                 if (repeatMode !== "weekly until") {
-                    req = await fetch("http://localhost:3000/generate", {
+                    req = await fetch("https://gen-lang-client-0914391112.uw.r.appspot.com/generate", {
                         method: "POST",
                         headers:{
                             'Content-type': 'application/json'
                         },
                         body: JSON.stringify({
                             'image': imgb64,
-                            // 'tz': Intl.DateTimeFormat().resolvedOptions().timeZone,
                             'repeat': repeatMode
                         })
                     });
                 } else {
-                    req = await fetch("http://localhost:3000/generate", {
+                    req = await fetch("https://gen-lang-client-0914391112.uw.r.appspot.com/generate", {
                         method: "POST",
                         headers:{
                             'Content-type': 'application/json'
@@ -79,7 +75,6 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                         body: JSON.stringify({
                             'image': imgb64,
                             'repeat': "weekly until",
-                            // 'tz': Intl.DateTimeFormat().resolvedOptions().timeZone,
                             'endRepeatDate': endRepeatDate
                         })
                     });
@@ -89,9 +84,11 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                 const ics:string = resp.ics
                 setEventsJson(events) // set events
                 setIcs(ics) // b64 encoded ics file
+                isLoading(false)
                 console.log(events)
-                console.log(ics)
+                // console.log(ics)
             } catch(error) {
+                isLoading(false);
                 console.log(error)
                 toast({
                     title: "an error occurred",
@@ -124,15 +121,35 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
             <div className="my-10"/>
             {device.width < 768 ? 
             <div className="flex flex-row items-center space-x-4">
-                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
+                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar} disabled={loading}>
+                    generate
+                    <ColorRing
+                        visible={loading}
+                        height="20"
+                        width="20"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff']}/>
+                </Button>
                 <Button className="w-full rounded-lg text-white p-2 bg-blue-500" onClick={toggle}>view calendar</Button> 
             </div>
             :
             <div className="">
-                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
+                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar} disabled={loading}>
+                    generate
+                    <ColorRing
+                        visible={loading}
+                        height="20"
+                        width="20"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#ffffff','#ffffff','#ffffff','#ffffff','#ffffff']}/> 
+                </Button>
             </div>
             }
-            {ics ? <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={download}>download .ics</Button> : null}
+            {ics && !loading ? <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={download}>download .ics</Button> : null}
         </>
     )
 }
