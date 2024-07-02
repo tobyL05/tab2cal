@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { ChevronsUpDown } from "lucide-react"
 
-import { merge } from "../../../utils/tw-merge"
+// import { merge } from "../../../utils/tw-merge"
 import { Button } from "./Button"
 import {
   Command,
@@ -18,7 +18,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "./Popover"
-import { Dispatch, SetStateAction } from "react"
 
 type option = {
     value: string

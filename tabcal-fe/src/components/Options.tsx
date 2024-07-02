@@ -9,7 +9,7 @@ export default function Options() {
     const repeatMode = useOptionsStore((state) => state.repeatMode);
     const endRepeatDate = useOptionsStore((state) => state.endRepeatDate);
     const setRepeatMode = useOptionsStore((state) => state.setRepeatMode);
-    const setTz = useOptionsStore((state) => state.setTz);
+    // const setTz = useOptionsStore((state) => state.setTz);
     const setEndRepeatDate = useOptionsStore((state) => state.setEndRepeatDate);
 
     useEffect(() => {
