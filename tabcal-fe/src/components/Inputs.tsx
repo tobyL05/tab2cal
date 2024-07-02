@@ -6,8 +6,10 @@ import { useOptionsStore } from "../store/OptionsStore";
 import { toast } from "./UI/Toast/Use-toast";
 import { useCalendarStore } from "../store/CalendarStore";
 import Event from "@fullcalendar/react"
+import { useEffect, useState } from "react";
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
+    const [icsDownload, setIcsDownload] = useState<string | undefined>()
 
     const device = useDevice()
 
@@ -15,8 +17,15 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
     const repeatMode = useOptionsStore((state) => state.repeatMode)
     const endRepeatDate = useOptionsStore((state) => state.endRepeatDate);
 
-    const setEventsJson = useCalendarStore((state) => state.setEventsJson)
+    const ics = useCalendarStore((state) => state.ics)
     const setIcs = useCalendarStore((state) => state.setIcs)
+    const setEventsJson = useCalendarStore((state) => state.setEventsJson)
+
+    useEffect(() => {
+        if (ics) {
+            setIcsDownload(icsDownload)
+        }
+    },[ics])
 
     function validate() {
         if (!imgb64) {
@@ -90,10 +99,15 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                     className: "bg-red-500 text-white font-poppins"
                 })
             }
-            // console.log(imgb64)
-            // console.log(repeatMode)
-            // console.log(endRepeatDate)
         }
+    }
+
+    function download() {
+        let fetchDataModified = `data:text/calendar;base64,${ics}`;
+        let a = document.createElement("a");
+        a.href = fetchDataModified;
+        a.download = 'tab2cal.ics';
+        a.click();
     }
 
     return (
@@ -110,14 +124,15 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
             <div className="my-10"/>
             {device.width < 768 ? 
             <div className="flex flex-row items-center space-x-4">
-                <Button className="w-full my-5 bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
+                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
                 <Button className="w-full rounded-lg text-white p-2 bg-blue-500" onClick={toggle}>view calendar</Button> 
             </div>
             :
             <div className="">
-                <Button className="w-full my-5 bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
+                <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={generateCalendar}>generate</Button>
             </div>
             }
+            {ics ? <Button className="w-full my-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-100 ease-in-out" onClick={download}>download .ics</Button> : null}
         </>
     )
 }

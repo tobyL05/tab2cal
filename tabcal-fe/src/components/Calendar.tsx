@@ -13,7 +13,7 @@ export default function Calendar({ className } : { className?: ClassValue}) {
 
     useEffect(() => {
         setEvents(eventsJson)
-        console.log(events)
+        // console.log(events)
     },[eventsJson])
 
     return (
