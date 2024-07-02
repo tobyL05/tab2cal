@@ -3,7 +3,6 @@ from datetime import datetime
 from icalendar import Calendar, Event
 import csv
 import uuid
-import os
 
 weekdays = {1: "mo",
             2: "tu",
@@ -49,6 +48,7 @@ class Parser:
         return self.calendar.to_ical()
 
     def response(self):
+        # print(self.to_json())
         return {
             "json": self.to_json(), # array of json objects
             "ics": base64.b64encode(self.to_ics()).decode('ascii') # base64 encoded ics file
