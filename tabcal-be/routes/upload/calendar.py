@@ -1,7 +1,6 @@
 import base64
 from datetime import datetime
 from icalendar import Calendar, Event
-import pytz
 import csv
 import uuid
 import os

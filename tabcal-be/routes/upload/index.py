@@ -21,6 +21,6 @@ def upload():
     img = Image.open(BytesIO(base64.b64decode(imgb64.split(",")[1])))
     tsv = parse_img(img)
     return Parser(tsv,repeat_mode,end_repeat_date).response()
-    return "success"
+    # return "success"
 
 # managed to read and parse as tsv
