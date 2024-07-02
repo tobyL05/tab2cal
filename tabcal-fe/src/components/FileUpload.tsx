@@ -38,7 +38,7 @@ export default function FileUpload( { className } : { className? : ClassValue}) 
             // console.log(file.type)
             setFilename(file.name)
             toast({
-                title: "upload Successful",
+                title: "upload successful",
                 description: "uploaded: " + file.name.toLowerCase(),
                 className: "bg-green-500 text-white font-poppins"
             })

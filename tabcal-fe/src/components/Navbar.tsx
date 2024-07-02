@@ -31,7 +31,7 @@ export default function Navbar({ className } : { className? : ClassValue}) {
                             </DialogTrigger>
                             <DialogContent className="bg-slate-200 text-black font-poppins">
                                 <DialogHeader>
-                                <DialogTitle>about</DialogTitle>
+                                <DialogTitle>about!</DialogTitle>
                                 <DialogDescription className="font-bold">
                                     turn images into universal calendar files.
                                 </DialogDescription>
