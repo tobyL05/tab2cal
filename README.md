@@ -1,7 +1,7 @@
 # Calendarize efficiently by turning screenshots into universal calendar files.
 
 I got tired of manually inputting every single office hours or exam I had into my calendar so I made this web app to automate the process.
-[Try it out](https://tab2cal.netlify.app) \
+[Try it out](https://tab2cal.netlify.app) 
 
 ### Tech
 #### Front-end
