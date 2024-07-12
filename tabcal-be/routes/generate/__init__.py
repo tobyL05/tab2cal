@@ -1,15 +1,10 @@
 from .calendar import Parser
-from flask import Blueprint, request
 from PIL import Image
 from io import BytesIO
 from .gemini import parse_img
 import base64
 
-
-upload_bp = Blueprint("upload",__name__)
-
-@upload_bp.route("/generate", methods=["POST"])
-def upload():
+def handleGenerate(request):
     print("request received")
     imgb64 = request.get_json()['image']
     repeat_mode = request.get_json()['repeat']

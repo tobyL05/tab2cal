@@ -48,7 +48,7 @@ class Parser:
         return self.calendar.to_ical()
 
     def response(self):
-        print(self.to_json())
+        # print(self.to_json())
         return {
             "json": self.to_json(), # array of json objects
             "ics": base64.b64encode(self.to_ics()).decode('ascii') # base64 encoded ics file
