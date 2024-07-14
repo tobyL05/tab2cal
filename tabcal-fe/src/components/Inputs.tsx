@@ -8,6 +8,7 @@ import { useCalendarStore } from "../store/CalendarStore";
 import Event from "@fullcalendar/react"
 import { useState } from "react";
 import { ColorRing } from "react-loader-spinner"
+import { useUserStore } from "../store/UserStore";
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
     const [loading, isLoading] = useState<boolean>(false)
@@ -17,6 +18,7 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
     const imgb64 = useOptionsStore((state) => state.imgb64)
     const repeatMode = useOptionsStore((state) => state.repeatMode)
     const endRepeatDate = useOptionsStore((state) => state.endRepeatDate);
+    const user = useUserStore((state) => state.user)
 
     const ics = useCalendarStore((state) => state.ics)
     const setIcs = useCalendarStore((state) => state.setIcs)
@@ -63,8 +65,9 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                         },
                         body: JSON.stringify({
                             'image': imgb64,
-                            'repeat': repeatMode
-                        })
+                            'repeat': repeatMode,
+                            'user': user?.user.uid  // if not undefined, save to cloud storage
+                        }) 
                     });
                 } else {
                     req = await fetch("https://gen-lang-client-0914391112.uw.r.appspot.com/generate", {
@@ -75,7 +78,8 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                         body: JSON.stringify({
                             'image': imgb64,
                             'repeat': "weekly until",
-                            'endRepeatDate': endRepeatDate
+                            'endRepeatDate': endRepeatDate,
+                            'user': user?.user.uid
                         })
                     });
                 }

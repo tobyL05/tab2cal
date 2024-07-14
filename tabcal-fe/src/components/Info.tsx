@@ -6,8 +6,8 @@ export default function Info() {
 
     return (
         <Dialog>
-            <DialogTrigger>
-                <BsInfoSquare size={25} />
+            <DialogTrigger className="w-fit md:w-full flex flex-row items-center justify-evenly">
+                <BsInfoSquare className="cursor-pointer transition duration-200 ease-in-out hover:translate-x-1 hover:-translate-y-1" size={30} />
             </DialogTrigger>
             <DialogContent className="bg-slate-200 text-black font-poppins">
                 <DialogHeader>

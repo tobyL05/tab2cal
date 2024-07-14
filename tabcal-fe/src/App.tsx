@@ -5,13 +5,28 @@ import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import useDevice from './hooks/hooks';
 import { merge } from '../utils/tw-merge';
-import Inputs from './components/Inputs';
 import { useCalendarStore } from './store/CalendarStore';
+import { useUserStore } from './store/UserStore';
+import InputTabs from './components/InputTabs';
+import { auth } from '../.secrets/firebase';
+import { getUser } from '../utils/firestore';
+import { UserDocument } from './types/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function App() {
     const [open ,isOpen] = useState<boolean>(false)
     const device = useDevice();
     const eventsJson = useCalendarStore((state) => state.eventsJson)
+    const setUser = useUserStore((state) => state.setUser)
+    const setCreds = useUserStore((state) => state.setCreds)
+
+    // use effect check for logged in account (onAuthStateChange)
+    onAuthStateChanged(auth, async(user) => {
+      if (user) {
+        setUser(await getUser(user.uid) as UserDocument)
+        // setCreds() 
+      }
+    })
 
     useEffect(() => {
       if (eventsJson.length != 0) {
@@ -31,7 +46,7 @@ function App() {
   return (
     <div className="w-full flex flex-row">
       <div className="w-full md:w-1/3 px-10 pt-10 md:pt-20 flex flex-col">
-          <Inputs toggle={toggle}/>
+        <InputTabs toggle={toggle}/>
       </div>
 
       <div className={merge("md:w-2/3", device.width > 768 ? "my-10 p-10 rounded-l-xl shadow-xl shadow-slate-400" : "")}>
