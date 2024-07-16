@@ -36,7 +36,7 @@ def parse_img(img) -> str:
     try:
         response = model.generate_content([get_prompt(), img])
         response.resolve()
-        # print(response.text)
+        print(response.text)
         return response.text
     except:
         print(traceback.format_exc())
