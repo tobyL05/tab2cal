@@ -1,3 +1,4 @@
+import Event from "@fullcalendar/react" 
 
 interface UserDocument {
     displayName: string
@@ -6,4 +7,8 @@ interface UserDocument {
     date_created: string // account creation date
 }
 
-export type { UserDocument }
+interface EventsDocument {
+    events: Event[]
+}
+
+export type { UserDocument, EventsDocument }

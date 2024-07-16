@@ -4,6 +4,7 @@ import { LuSave } from "react-icons/lu"
 import Inputs from "./Inputs"
 import { useUserStore } from "../store/UserStore"
 import LoginTab from "./LoginTab"
+import RecentCalendars from "./RecentCalendars"
 
 export default function InputTabs({ toggle } : { toggle: () => void }) {
     const user = useUserStore((state) => state.user)
@@ -18,7 +19,7 @@ export default function InputTabs({ toggle } : { toggle: () => void }) {
                 <Inputs toggle={toggle}/>
             </TabsContent>
             <TabsContent value="recent">
-                {user ? <h1>recent</h1> : <LoginTab />}
+                {user ? <RecentCalendars /> : <LoginTab />}
             </TabsContent>
         </Tabs>
     )

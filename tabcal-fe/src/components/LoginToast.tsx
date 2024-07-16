@@ -1,11 +1,7 @@
 import { Button } from "./UI/Button"
 import { CiLogin } from "react-icons/ci"
 import { DialogHeader, DialogTrigger, Dialog, DialogContent, DialogDescription, DialogTitle } from "./UI/Dialog";
-import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth"
-import { auth, googleAuthProvider } from "../../.secrets/firebase"
-import { toast } from "./UI/Toast/Use-toast";
 import { useUserStore } from "../store/UserStore";
-import { addUser, checkUserAlreadyExists, getUser } from "../../utils/firestore";
 import { login } from "../../utils/auth";
 
 export default function Login() {

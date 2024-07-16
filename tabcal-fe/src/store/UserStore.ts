@@ -8,13 +8,20 @@ interface UserInterface {
     credential: OAuthCredential | undefined
     setUser: (newUser: UserDocument) => void
     setCreds: (creds: OAuthCredential) => void
+    addCalendar: (calendarUUID: string) => void
 }
 
 const useUserStore = create<UserInterface>()((set) => ({
     user: undefined,
     credential: undefined,
     setUser: (newUser: UserDocument) => set(() => ({user: newUser})),
-    setCreds: (creds: OAuthCredential) => set(() => ({credential: creds}))
+    setCreds: (creds: OAuthCredential) => set(() => ({credential: creds})),
+    addCalendar: (calendarUUID: string) => set((state) => ({
+        user: {
+            ...state.user, 
+            calendars: [...state.user!.calendars, calendarUUID]
+        } as UserDocument
+    }))
 }))
 
 export { useUserStore }

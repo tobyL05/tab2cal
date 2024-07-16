@@ -6,6 +6,7 @@ import "./styles/calendar.css"
 import { useCalendarStore } from "../store/CalendarStore";
 import { useEffect, useState } from "react";
 import Event from "@fullcalendar/react"
+import { toast } from "./UI/Toast/Use-toast";
 
 export default function Calendar({ className } : { className?: ClassValue}) {
     const [events, setEvents] = useState<Event[]>([])
@@ -35,10 +36,12 @@ export default function Calendar({ className } : { className?: ClassValue}) {
                     right: 'today,prev,next'
                 }}
                 events={events}
-                eventMouseEnter={(event) => {
-                    console.log(event.event.title)
-                    console.log(event.event.start)
-                    console.log(event.event.end)
+                eventClick={(event) => {
+                    toast({
+                        title: `${event.event.title} - ${event.event.start!.toDateString()}`,
+                        description: `${event.event.start!.toTimeString().split(" ")[0]} - ${event.event.end!.toTimeString().split(" ")[0]}`,
+                        className: "bg-white font-poppins text-black shadow-lg"
+                    })
                 }}
                 handleWindowResize
             />

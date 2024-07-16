@@ -1,7 +1,7 @@
-import { signInWithPopup, GoogleAuthProvider, OAuthCredential, User, signOut } from "firebase/auth";
-import { auth, googleAuthProvider } from "../.secrets/firebase";
+import { signInWithPopup, GoogleAuthProvider, OAuthCredential, signOut } from "firebase/auth";
+import { auth, Collections, googleAuthProvider } from "../.secrets/firebase";
 import { toast } from "../src/components/UI/Toast/Use-toast";
-import { checkUserAlreadyExists, getUser, addUser } from "./firestore";
+import { checkDocumentExists, getUser, addUser } from "./firestore";
 import { UserDocument } from "../src/types/firestore";
 
 const login = async (setUser: (user: UserDocument) => void, setCreds: (creds: OAuthCredential) => void): Promise<void> => {
@@ -9,9 +9,13 @@ const login = async (setUser: (user: UserDocument) => void, setCreds: (creds: OA
         const signInResult = await signInWithPopup(auth, googleAuthProvider)
         const credential = GoogleAuthProvider.credentialFromResult(signInResult)
         if (credential) {
-            if (await checkUserAlreadyExists(signInResult.user.uid)) {
+            const userExists = await checkDocumentExists(signInResult.user.uid, Collections.USERS)
+            if (userExists) {
                 // existing user
                 setUser(await getUser(signInResult.user.uid) as UserDocument)
+            } else if (userExists === undefined) {
+                // error in checking whether user exists
+                authError()
             } else {
                 // new user
                 const newUser = await addUser(signInResult.user)
@@ -25,18 +29,27 @@ const login = async (setUser: (user: UserDocument) => void, setCreds: (creds: OA
             }
         }
     } catch (error) {
-        toast({
-            title: "an error occurred signing in",
-            description: "please try again",
-            className: "bg-red-500 text-white font-poppins"
-        })
+        authError()
     }
 }
 
-const logout = async() => {
-    await signOut(auth)
-    console.log("sign out successful")
-    window.location.reload()
+const logout = async(): Promise<void> => {
+    try {
+        await signOut(auth)
+        console.log("sign out successful")
+        window.location.reload()
+    } catch (error) {
+        authError()
+    }
+}
+
+// Error toast
+const authError = (): void => {
+    toast({
+        title: "something went wrong",
+        description: "please try again",
+        className: "bg-red-500 text-white font-poppins"
+    })
 }
 
 export { login, logout }

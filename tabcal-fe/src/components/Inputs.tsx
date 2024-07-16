@@ -9,6 +9,10 @@ import Event from "@fullcalendar/react"
 import { useState } from "react";
 import { ColorRing } from "react-loader-spinner"
 import { useUserStore } from "../store/UserStore";
+import { auth } from "../../.secrets/firebase";
+import { v4 as uuidv4 } from 'uuid';
+import { getUser, save } from "../../utils/firestore";
+import { UserDocument } from "../types/firestore";
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
     const [loading, isLoading] = useState<boolean>(false)
@@ -18,11 +22,11 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
     const imgb64 = useOptionsStore((state) => state.imgb64)
     const repeatMode = useOptionsStore((state) => state.repeatMode)
     const endRepeatDate = useOptionsStore((state) => state.endRepeatDate);
-    const user = useUserStore((state) => state.user)
 
     const ics = useCalendarStore((state) => state.ics)
     const setIcs = useCalendarStore((state) => state.setIcs)
     const setEventsJson = useCalendarStore((state) => state.setEventsJson)
+    const addCalendar = useUserStore((state) => state.addCalendar)
 
     function validate() {
         if (!imgb64) {
@@ -66,7 +70,7 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                         body: JSON.stringify({
                             'image': imgb64,
                             'repeat': repeatMode,
-                            'user': user?.user.uid  // if not undefined, save to cloud storage
+                            // 'user': user?.user.uid  // if not undefined, save to cloud storage
                         }) 
                     });
                 } else {
@@ -79,17 +83,30 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                             'image': imgb64,
                             'repeat': "weekly until",
                             'endRepeatDate': endRepeatDate,
-                            'user': user?.user.uid
+                            // 'user': user?.user.uid
                         })
                     });
                 }
                 const resp = await req.json();
-                const events: Event[] = resp.json;
-                const ics:string = resp.ics
+                const events: Event[] = resp.json; // events to display on FullCalendar
+                const ics:string = resp.ics // actual ics file in b64
+
+                if (auth.currentUser) {
+                    const uuid = uuidv4()
+                    const saved = await save(auth.currentUser.uid, uuid , ics, events);
+                    if (saved) {
+                        // update user
+                        addCalendar(uuid)   
+                        // setUser(await getUser(auth.currentUser.uid) as UserDocument)
+                    }
+                }
+
                 setEventsJson(events) // set events
                 setIcs(ics) // b64 encoded ics file
                 isLoading(false)
                 console.log(events)
+
+                // if user, save here
                 // console.log(ics)
             } catch(error) {
                 isLoading(false);
