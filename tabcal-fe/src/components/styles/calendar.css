@@ -31,3 +31,7 @@
 .fc-day {
     text-transform: lowercase;
 }
+
+.fc-daygrid-day-events {
+    cursor: pointer
+}

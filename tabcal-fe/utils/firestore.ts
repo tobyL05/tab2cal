@@ -2,7 +2,6 @@ import { User } from "firebase/auth";
 import { Collections, db, storage } from "../.secrets/firebase";
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { EventsDocument, UserDocument } from "../src/types/firestore";
-import Event from "@fullcalendar/react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { toast } from "../src/components/UI/Toast/Use-toast";
 
@@ -26,18 +25,19 @@ const addUser = async (user: User): Promise<UserDocument | undefined> => {
       }
 }
 
-const getUser = async (uid: string): Promise<UserDocument | undefined>  => {
+const getUser = async (uid: string): Promise<UserDocument>  => {
     try {
         return read<UserDocument>(uid, Collections.USERS)
     } catch (error) {
-        return undefined
+        console.log(`An error occurred retrieving ${uid}: ${error}`)
+        throw error
     }
 }
 
 
 // CALENDARS
 
-const save = async (userUID: string, calendarUUID:string, ics: string, events: Event[]): Promise<boolean>=> {
+const save = async (userUID: string, calendarUUID:string, ics: string, events: CalendarEvent[]): Promise<boolean>=> {
     try {
         await addEvents(calendarUUID, events)
         await uploadIcs(calendarUUID, ics)
@@ -56,7 +56,7 @@ const save = async (userUID: string, calendarUUID:string, ics: string, events: E
 
 
 // Write to an "events" collection
-const addEvents = async (uuid: string, events: Event[]): Promise<Event[]> => {
+const addEvents = async (uuid: string, events: CalendarEvent[]): Promise<Event[]> => {
     // can events be written to a collection?
     try {
         const doc = await write<Event[]>(uuid, Collections.CALENDARS, {
@@ -76,10 +76,8 @@ const uploadIcs = async (uuid: string, ics: string): Promise<string> => {
         contentType: "text/calendar"
     }
     try{
-        console.log(ics)
         const icsFile = await fetch(`data:text/calendar;base64,${ics}`) 
         const icsBlob = await icsFile.blob()
-        console.log(icsBlob)
         const upload = await uploadBytes(ref(storage, `${uuid}.ics`), icsBlob, metadata)
         return await getDownloadURL(upload.ref)
     } catch (error) {
@@ -102,19 +100,8 @@ const addCalendar = async (userUID: string, calendarUUID: string): Promise<void>
     }
 }
 
-const readCalendars = async(userUID: string): Promise<string[]> => {
-    try {
-        const user = await read<UserDocument>(userUID, Collections.USERS)
-        return user.calendars
-    } catch (error) {
-        console.log("Error reading user")
-        throw error
-    }
-}
-
-
 // Returns an Event[] of the given calendarUUID
-const getEvents = async(calendarUUID: string): Promise<Event[]> => {
+const getEvents = async(calendarUUID: string): Promise<CalendarEvent[]> => {
     try {
         const events = await read<EventsDocument>(calendarUUID, Collections.CALENDARS)
         return events.events
@@ -139,27 +126,42 @@ const getIcsDownloadURL = async (calendarUUID: string): Promise<string> => {
 // Returns the document 
 // Throws an error
 const write = async <T>(id: string, collection: string, document: Object) => {
+    try {
     await setDoc(doc(db, collection, id), document);
-    console.log(`Successfully wrote ${id}`)
+    // console.log(`Successfully wrote ${id}`)
     return document as T
+    } catch (error) {
+        throw error
+    }
 }
 
 // Reads the document with the given id in the given collection
 const read = async <T>(id: string, collection: string) => {
-    const docSnap = await getDoc(doc(db,collection,id))
-    return docSnap.data() as T
+    try {
+        const docSnap = await getDoc(doc(db,collection,id))
+        return docSnap.data() as T
+    } catch (error) {
+        throw error
+    }
 }
 
 // Check if the document with the given uid in the given collection exists
 // Returns true if the document exists, false if the document doesn't exist, and undefined if 
-const checkDocumentExists = async (uid: string, collection: string): Promise<Boolean | undefined> => {
+const checkDocumentExists = async (uid: string, collection: string): Promise<Boolean> => {
     try {
         const docSnap = await getDoc(doc(db, collection, uid))
         return docSnap.exists()
     } catch (error) {
-        return undefined
+        throw error
     }
 }
 
+const somethingWentWrong = (): void => {
+    toast({
+        title: "something went wrong",
+        description: "are you connected to the internet?",
+        className: "bg-red-500 text-white font-poppins"
+    })
+}
 
 export { checkDocumentExists, addUser, getUser, save, getEvents, getIcsDownloadURL }

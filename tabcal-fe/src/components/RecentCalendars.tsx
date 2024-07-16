@@ -15,11 +15,11 @@ export default function RecentCalendars() {
 
     return (
         <div className="">
-            <h1 className="text-2xl font-bold font-poppins my-5">Recent</h1>
+            <h1 className="text-2xl font-bold font-poppins my-4">recent</h1>
             <div className="w-full flex flex-col items-start space-y-4">
-                {user!.calendars.map((calendarUUID: string) => {
+                {user!.calendars.map((calendarUUID: string, index: number) => {
                     return (
-                        <SavedCalendar calendarUUID={calendarUUID} />
+                        <SavedCalendar key={index} index={index} calendarUUID={calendarUUID} />
                     )
                 })}
             </div>

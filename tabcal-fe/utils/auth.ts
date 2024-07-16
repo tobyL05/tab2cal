@@ -4,15 +4,27 @@ import { toast } from "../src/components/UI/Toast/Use-toast";
 import { checkDocumentExists, getUser, addUser } from "./firestore";
 import { UserDocument } from "../src/types/firestore";
 
+// Surely the try-catches can be refactored. Switch case error handler?
 const login = async (setUser: (user: UserDocument) => void, setCreds: (creds: OAuthCredential) => void): Promise<void> => {
     try{
         const signInResult = await signInWithPopup(auth, googleAuthProvider)
         const credential = GoogleAuthProvider.credentialFromResult(signInResult)
         if (credential) {
-            const userExists = await checkDocumentExists(signInResult.user.uid, Collections.USERS)
+            let userExists
+            try {
+                userExists = await checkDocumentExists(signInResult.user.uid, Collections.USERS)
+            } catch (error) {
+                console.log()
+                authError()
+            }
             if (userExists) {
                 // existing user
-                setUser(await getUser(signInResult.user.uid) as UserDocument)
+                try{
+                    setUser(await getUser(signInResult.user.uid) as UserDocument)
+                } catch (error) {
+                    console.log(`Error retrieving ${signInResult.user.uid}: ${error}`)
+                    authError()
+                }
             } else if (userExists === undefined) {
                 // error in checking whether user exists
                 authError()

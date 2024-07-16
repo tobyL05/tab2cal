@@ -24,13 +24,13 @@ export default function Profile() {
             <DialogContent className="bg-slate-200 text-black font-poppins">
                 <DialogHeader>
                 <DialogTitle className="text-xl">{ user!.displayName }</DialogTitle>
-                <DialogDescription className="font-bold">
-                    {/* account created */}
-                    account created on { user!.date_created }
-                </DialogDescription>
-                {/* stats? */}
-                    { user!.calendars.length } calendars have been made
+                    <DialogDescription className="font-bold">
+                        {/* account created */}
+                        created on: { user!.date_created }
+                    </DialogDescription>
                 </DialogHeader>
+                {/* stats? */}
+                calendars made: { user!.calendars.length }
                 <DialogFooter>
                     <Button onClick={logout}>
                         logout

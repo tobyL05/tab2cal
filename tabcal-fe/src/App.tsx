@@ -12,6 +12,7 @@ import { auth } from '../.secrets/firebase';
 import { getUser } from '../utils/firestore';
 import { UserDocument } from './types/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import { toast } from './components/UI/Toast/Use-toast';
 
 function App() {
     const [open ,isOpen] = useState<boolean>(false)
@@ -23,8 +24,16 @@ function App() {
     // use effect check for logged in account (onAuthStateChange)
     onAuthStateChanged(auth, async(user) => {
       if (user) {
-        setUser(await getUser(user.uid) as UserDocument)
-        // setCreds() 
+        try {
+          setUser(await getUser(user.uid) as UserDocument)
+          // setCreds() 
+        } catch (error) {
+          toast({
+            title: "an error occurred",
+            description: "an error occurred",
+            className: "bg-red-500 font-poppins text-white"
+          })
+        }
       }
     })
 

@@ -5,14 +5,12 @@ import { Button } from "./UI/Button";
 import { useOptionsStore } from "../store/OptionsStore";
 import { toast } from "./UI/Toast/Use-toast";
 import { useCalendarStore } from "../store/CalendarStore";
-import Event from "@fullcalendar/react"
 import { useState } from "react";
 import { ColorRing } from "react-loader-spinner"
 import { useUserStore } from "../store/UserStore";
 import { auth } from "../../.secrets/firebase";
 import { v4 as uuidv4 } from 'uuid';
-import { getUser, save } from "../../utils/firestore";
-import { UserDocument } from "../types/firestore";
+import { save } from "../../utils/firestore";
 
 export default function Inputs({ toggle } : { toggle: () => void }) {
     const [loading, isLoading] = useState<boolean>(false)
@@ -88,7 +86,7 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                     });
                 }
                 const resp = await req.json();
-                const events: Event[] = resp.json; // events to display on FullCalendar
+                const events: CalendarEvent[] = resp.json; // events to display on FullCalendar
                 const ics:string = resp.ics // actual ics file in b64
 
                 if (auth.currentUser) {
@@ -104,7 +102,7 @@ export default function Inputs({ toggle } : { toggle: () => void }) {
                 setEventsJson(events) // set events
                 setIcs(ics) // b64 encoded ics file
                 isLoading(false)
-                console.log(events)
+                // console.log(events)
 
                 // if user, save here
                 // console.log(ics)

@@ -1,4 +1,3 @@
-import Event from "@fullcalendar/react" 
 
 interface UserDocument {
     displayName: string
@@ -8,7 +7,7 @@ interface UserDocument {
 }
 
 interface EventsDocument {
-    events: Event[]
+    events: CalendarEvent[]
 }
 
 export type { UserDocument, EventsDocument }
