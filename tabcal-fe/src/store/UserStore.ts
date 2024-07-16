@@ -1,5 +1,5 @@
 
-import { OAuthCredential, User } from "firebase/auth"
+import { OAuthCredential } from "firebase/auth"
 import { create } from "zustand"
 import { UserDocument } from "../types/firestore"
 

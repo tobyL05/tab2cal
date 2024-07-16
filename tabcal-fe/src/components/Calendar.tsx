@@ -18,7 +18,8 @@ export default function Calendar({ className } : { className?: ClassValue}) {
         setEvents(eventsJson)
         if (eventsJson.length != 0) {
             // literally the worst docs
-            const calendarApi: CalendarApi = calendarRef.current!.getApi()
+            const calendar: any = calendarRef.current!
+            const calendarApi: CalendarApi = calendar.getApi()
 
             // no repeat date: 2024-10-14T10:00:00 (correct)
             // repeat date: 20240715T1400 (incorrect)

@@ -19,7 +19,7 @@ function App() {
     const device = useDevice();
     const eventsJson = useCalendarStore((state) => state.eventsJson)
     const setUser = useUserStore((state) => state.setUser)
-    const setCreds = useUserStore((state) => state.setCreds)
+    // const setCreds = useUserStore((state) => state.setCreds)
 
     // use effect check for logged in account (onAuthStateChange)
     onAuthStateChanged(auth, async(user) => {

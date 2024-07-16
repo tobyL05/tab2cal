@@ -156,12 +156,12 @@ const checkDocumentExists = async (uid: string, collection: string): Promise<Boo
     }
 }
 
-const somethingWentWrong = (): void => {
-    toast({
-        title: "something went wrong",
-        description: "are you connected to the internet?",
-        className: "bg-red-500 text-white font-poppins"
-    })
-}
+// const somethingWentWrong = (): void => {
+//     toast({
+//         title: "something went wrong",
+//         description: "are you connected to the internet?",
+//         className: "bg-red-500 text-white font-poppins"
+//     })
+// }
 
 export { checkDocumentExists, addUser, getUser, save, getEvents, getIcsDownloadURL }
