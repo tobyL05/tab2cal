@@ -23,7 +23,7 @@ export default function SavedCalendar({ calendarUUID, index } : { calendarUUID: 
     }
 
     return (
-        <div className="w-full flex flex-row justify-between items-center ring-offset-2 py-4 px-2 cursor-pointer rounded-lg transition  ease-in-out duration-150 hover:bg-neutral-200 active:scale-90 " onClick={handleClick}>
+        <div className="w-full flex flex-row justify-between items-center ring-offset-2 py-4 px-2 cursor-pointer rounded-lg transition ease-in-out duration-150 hover:bg-neutral-200 active:scale-95" onClick={handleClick}>
             <div className="w-3/4 flex flex-row items-center font-poppins space-x-1">
                 <CiCalendar size={25}/>
                 <h1 className="w-3/4 font-poppins truncate">Calendar { index+1 }</h1>
